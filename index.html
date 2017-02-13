@@ -519,7 +519,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#what_you_ll_need">What you’ll need</a></li>
 <li><a href="#create_an_ad_hoc_task">Create an ad-hoc task</a></li>
 <li><a href="#add_a_task_description">Add a task description</a></li>
-<li><a href="#convert_to_a_custom_task_type">Convert to a custom task type</a></li>
+<li><a href="#make_the_message_configurable">Make the message configurable</a></li>
 <li><a href="#summary">Summary</a></li>
 <li><a href="#next_steps">Next steps</a></li>
 <li><a href="#help_improve_this_guide">Help improve this guide</a></li>
@@ -530,10 +530,7 @@ table.CodeRay td.code>pre{padding:0}
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p><a href="https://docs.gradle.org/current/userguide/tutorial_using_tasks.html">Tasks</a> are the cornerstone of getting things done in Gradle. They represent single atomic pieces of work within a build such as creating a JAR or linking an executable. Even though the Gradle distribution ships with a good range of <a href="https://docs.gradle.org/3.0/dsl//org.gradle.api.Task.html">predefined tasks and task types</a> and  most <a href="https://plugins.gradle.org">third-party plugins</a> providing additional tasks, it might still not be enough for your own project or organizational context.</p>
-</div>
-<div class="paragraph">
-<p>Gradle&#8217;s flexibility allows for the creation of custom tasks within a build script.</p>
+<p>Tasks are the cornerstone of getting things done in Gradle. They represent single atomic pieces of work within a build such as creating a JAR or linking an executable. This guide will walk you through the process of customising your build using small, bespoke tasks.</p>
 </div>
 </div>
 </div>
@@ -541,7 +538,7 @@ table.CodeRay td.code>pre{padding:0}
 <h2 id="what_you_ll_create"><a class="anchor" href="#what_you_ll_create"></a>What you&#8217;ll create</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This guide will walk you through the creation of a ad-hoc Gradle task and converting it to a custom task type.</p>
+<p>You&#8217;ll start by creating an ad-hoc Gradle task that prints <em>Hello, World</em> to the console. You&#8217;ll then move to making it configurable to print any message. In this process you&#8217;ll learn about ad-hoc tasks and custom task types.</p>
 </div>
 </div>
 </div>
@@ -573,10 +570,11 @@ table.CodeRay td.code>pre{padding:0}
 <p>In a new folder create a <code>build.gradle</code> and enter the following</p>
 </div>
 <div class="listingblock">
+<div class="title">build.gradle</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">task hello { <i class="conum" data-value="1"></i><b>(1)</b>
   doLast { <i class="conum" data-value="2"></i><b>(2)</b>
-      println <span class="string"><span class="delimiter">'</span><span class="content">Hello, World</span><span class="delimiter">'</span></span>
+      println <span class="string"><span class="delimiter">'</span><span class="content">Hello, World!</span><span class="delimiter">'</span></span>
   }
 }</code></pre>
 </div>
@@ -585,17 +583,24 @@ table.CodeRay td.code>pre{padding:0}
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>An ad-hoc task is created by simply using the keyword <code>task</code> followed by the
-name of the task and finally the closure that will configure the task.</td>
+<td>Create a new ad-hoc task called <code>hello</code>.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Ad-hoc task actions are added using <a href="https://docs.gradle.org/3.0/javadoc//org/gradle/api/Task.html#doLast(groovy.lang.Closure)">doLast</a> or <a href="https://docs.gradle.org/3.0/javadoc//org/gradle/api/Task.html#doFirst(groovy.lang.Closure)">doFirst</a>.</td>
+<td>Add a task action to print to the console.</td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Save the file and on the command-line type <code>gradle tasks</code>. Your new task will appear under <code>Other tasks</code>.</p>
+<p>Save the file and on the command-line and type:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>gradle tasks</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Save the file and on the command-line type <code>gradle tasks --all</code>. Your new task will appear under <code>Other tasks</code>.</p>
 </div>
 <div class="listingblock">
 <div class="title">Verifying that your task has been created</div>
@@ -606,10 +611,18 @@ hello</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Run your task by executing <code>gradle hello</code> and it will produce a simple output</p>
+<p>Run your task</p>
 </div>
 <div class="listingblock">
-<div class="title">Executing your ad-hoc task</div>
+<div class="content">
+<pre>gradle hello</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It will produce a simple output.</p>
+</div>
+<div class="listingblock">
+<div class="title">Output from executing your ad-hoc task</div>
 <div class="content">
 <pre>:hello <i class="conum" data-value="1"></i><b>(1)</b>
 Hello, World <i class="conum" data-value="2"></i><b>(2)</b></pre>
@@ -619,16 +632,16 @@ Hello, World <i class="conum" data-value="2"></i><b>(2)</b></pre>
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Indicates that your <code>hello</code> task has executed.</td>
+<td>This indicates that your <code>hello</code> task has executed.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>The output from your ad-hoc task.</td>
+<td>This is the output from your ad-hoc task.</td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Congratulations. You have you added your first ad-hoc task.</p>
+<p>Congratulations! You have you added your first ad-hoc task.</p>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -641,7 +654,7 @@ Hello, World <i class="conum" data-value="2"></i><b>(2)</b></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">task hello &lt;&lt; {
-  println <span class="string"><span class="delimiter">'</span><span class="content">Hello, World</span><span class="delimiter">'</span></span>
+  println <span class="string"><span class="delimiter">'</span><span class="content">Hello, World!</span><span class="delimiter">'</span></span>
 }</code></pre>
 </div>
 </div>
@@ -664,7 +677,7 @@ Hello, World <i class="conum" data-value="2"></i><b>(2)</b></pre>
 <p>Although you have tested your new ad-hoc task and know that it works, it is good practice to tell others who will use your build script what the purpose of your new task is. It is also useful to categorise your task.</p>
 </div>
 <div class="paragraph">
-<p>When you ran <code>gradle tasks</code> earlier you would have seen other tasks in the listing which contain descriptions and are grouped according to function.</p>
+<p>When you ran <code>gradle tasks --all</code> earlier you would have seen other tasks in the listing which contain descriptions and are grouped according to function. Also (and since Gradle 3.3) if a task does not have a group it will not be listed unless <code>--all</code> is specified.</p>
 </div>
 <div class="listingblock">
 <div class="title">Well-documented tasks</div>
@@ -679,10 +692,12 @@ wrapper - Generates Gradle wrapper files. [incubating]</pre>
 <p>This is achieved by setting the <code>group</code> and <code>description</code> properties on the task.  Edit your ad-hoc task and add the following:</p>
 </div>
 <div class="listingblock">
+<div class="title">build.gradle</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">task hello {
   group <span class="string"><span class="delimiter">'</span><span class="content">Welcome</span><span class="delimiter">'</span></span>
   description <span class="string"><span class="delimiter">'</span><span class="content">Produces a greeting</span><span class="delimiter">'</span></span>
+
   doLast {
       println <span class="string"><span class="delimiter">'</span><span class="content">Hello, World</span><span class="delimiter">'</span></span>
   }
@@ -690,9 +705,10 @@ wrapper - Generates Gradle wrapper files. [incubating]</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Run <code>gradle tasks</code> again and now you should see</p>
+<p>Run <code>gradle tasks</code> again.</p>
 </div>
 <div class="listingblock">
+<div class="title">Output from 'tasks' task</div>
 <div class="content">
 <pre>Welcome tasks
 -------------
@@ -700,23 +716,21 @@ hello - Produces a greeting</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Congratulations! You have created your ad-hoc task and documented it.</p>
+<p>Well done!</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="convert_to_a_custom_task_type"><a class="anchor" href="#convert_to_a_custom_task_type"></a>Convert to a custom task type</h2>
+<h2 id="make_the_message_configurable"><a class="anchor" href="#make_the_message_configurable"></a>Make the message configurable</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Ad-hoc tasks are good for bespoke, small &amp; simple tasks, but they do not scale. The logic cannot be re-used very easily.  You could just copy and paste and create more of the same, just changing the name and modifying the action slightly. This will soon become a maintainability trap and the build script will become unreadable.</p>
+<p>This is the point where you need to convert your ad-hoc task into a custom task type, and this is achieved by creating a class within the build script.</p>
 </div>
 <div class="paragraph">
-<p>This is the point where you need to convert your ad-hoc task into a custom task type, and this is achieved by creating a class inline within the build script.</p>
-</div>
-<div class="paragraph">
-<p>Return to your <code>build.gradle</code> file and add the following class.</p>
+<p>Return to your build script and add the following class and refactor your <code>hello</code> task.</p>
 </div>
 <div class="listingblock">
+<div class="title">build.gradle</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Greeting</span> <span class="directive">extends</span> DefaultTask {  <i class="conum" data-value="1"></i><b>(1)</b> <i class="conum" data-value="2"></i><b>(2)</b>
     <span class="predefined-type">String</span> message <i class="conum" data-value="3"></i><b>(3)</b>
@@ -726,6 +740,13 @@ hello - Produces a greeting</pre>
     <span class="type">void</span> sayGreeting() {
         println <span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">${</span>message<span class="inline-delimiter">}</span></span><span class="content">, </span><span class="inline"><span class="inline-delimiter">${</span>recipient<span class="inline-delimiter">}</span></span><span class="content">!</span><span class="delimiter">&quot;</span></span> <i class="conum" data-value="5"></i><b>(5)</b>
     }
+}
+
+task hello ( type : Greeting ) { <i class="conum" data-value="6"></i><b>(6)</b>
+    group <span class="string"><span class="delimiter">'</span><span class="content">Welcome</span><span class="delimiter">'</span></span>
+    description <span class="string"><span class="delimiter">'</span><span class="content">Produces a world greeting</span><span class="delimiter">'</span></span>
+    message <span class="string"><span class="delimiter">'</span><span class="content">Hello</span><span class="delimiter">'</span></span> <i class="conum" data-value="7"></i><b>(7)</b>
+    recipient <span class="string"><span class="delimiter">'</span><span class="content">World</span><span class="delimiter">'</span></span>
 }</code></pre>
 </div>
 </div>
@@ -741,51 +762,42 @@ hello - Produces a greeting</pre>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>Adding <code>message</code> and <code>recipient</code> properties allows instance of this custom task type to be configurable</td>
+<td>Adding <code>message</code> and <code>recipient</code> properties allow instances of this custom task type to be configurable</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>It is standard practice to have a default action for a task and this is achieved by adding the <code>@TaskAction</code> annotation to a <strong>single</strong> method in the task class. When the task is executed this is the method that will be called.</td>
+<td>Annotate the default task action.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="5"></i><b>5</b></td>
 <td>Print the message using a standard Groovy interpolated string.</td>
 </tr>
-</table>
-</div>
-<div class="paragraph">
-<p>Now that you have created the class, what remains is to refactor the existing <code>hello</code> task:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">task hello ( type : Greeting ) { <i class="conum" data-value="1"></i><b>(1)</b>
-    group <span class="string"><span class="delimiter">'</span><span class="content">Welcome</span><span class="delimiter">'</span></span>
-    description <span class="string"><span class="delimiter">'</span><span class="content">Produces a world greeting</span><span class="delimiter">'</span></span>
-    message <span class="string"><span class="delimiter">'</span><span class="content">Hello</span><span class="delimiter">'</span></span> <i class="conum" data-value="2"></i><b>(2)</b>
-    recipient <span class="string"><span class="delimiter">'</span><span class="content">World</span><span class="delimiter">'</span></span>
-}</code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
 <tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
 <td>Specify the task type by referencing the class type <code>Greeting</code> you have added above.</td>
 </tr>
 <tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
 <td>Configure the message and the recipient.</td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Test your modification by running <code>gradle hello</code> again as you should see the same output</p>
+<p>Test your modification.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>gradle hello</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You should see the same output</p>
 </div>
 <div class="listingblock">
 <div class="title">Output after conversion to a custom task type</div>
 <div class="content">
 <pre>:hello
-Hello, World</pre>
+Hello, World!</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -794,7 +806,7 @@ Hello, World</pre>
 <div class="listingblock">
 <div class="title">Adding a second task</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">task germanHello( type : Greeting ) {
+<pre class="CodeRay highlight"><code data-lang="groovy">task gutenTag( type : Greeting ) {
     group <span class="string"><span class="delimiter">'</span><span class="content">Welcome</span><span class="delimiter">'</span></span>
     description <span class="string"><span class="delimiter">'</span><span class="content">Produces a German greeting</span><span class="delimiter">'</span></span>
     message <span class="string"><span class="delimiter">'</span><span class="content">Guten Tag</span><span class="delimiter">'</span></span>
@@ -823,17 +835,17 @@ No assignment is required during configuration as Gradle decorates the propertie
 <pre>Welcome tasks
 -------------
 hello - Produces a greeting
-germanHello - Produces a German greeting</pre>
+gutenTag - Produces a German greeting</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Finally, run the new task by doing <code>gradle germanHello</code></p>
+<p>Finally, run the new task by doing <code>gradle gutenTag</code></p>
 </div>
 <div class="listingblock">
 <div class="title">Output of your second task.</div>
 <div class="content">
-<pre>:germanHello
-Guten Tag, Welt</pre>
+<pre>:gutenTag
+Guten Tag, Welt!</pre>
 </div>
 </div>
 </div>
@@ -842,7 +854,7 @@ Guten Tag, Welt</pre>
 <h2 id="summary"><a class="anchor" href="#summary"></a>Summary</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>That&#8217;s it! You&#8217;ve worked through the steps necessary to create a custom Gradle Task. You should now have learnt how to</p>
+<p>That&#8217;s it! You&#8217;ve worked through the steps necessary to create a custom Gradle Task. You should now have learned how to</p>
 </div>
 <div class="ulist">
 <ul>
@@ -850,7 +862,7 @@ Guten Tag, Welt</pre>
 <p>Create an ad-hoc task and add an action using <code>doLast</code>.</p>
 </li>
 <li>
-<p>Document an ad-hoc task.</p>
+<p>Document a task.</p>
 </li>
 <li>
 <p>Convert an ad-hoc task to a custom Gradle task type and creating task instances.</p>
@@ -870,6 +882,9 @@ Guten Tag, Welt</pre>
 <li>
 <p>Having classes in a build script will soon lead to a messy and potentially unmaintainable build script. Learn how to <a href="https://docs.gradle.org/3.0/userguide//organizing_build_logic.html">organize your build logic</a>.</p>
 </li>
+<li>
+<p>Read more about <a href="https://docs.gradle.org/current/userguide/tutorial_using_tasks.html">using tasks</a>, and <a href="https://docs.gradle.org/3.0/dsl//org.gradle.api.Task.html">predefined tasks and task types</a></p>
+</li>
 </ul>
 </div>
 </div>
@@ -885,7 +900,7 @@ Guten Tag, Welt</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-12-05 19:14:53 GMT
+Last updated 2017-02-13 10:24:30 UTC
 </div>
 </div>
 </body>
