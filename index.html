@@ -73,7 +73,7 @@
 <div class="ulist">
 <ul>
 <li>
-<p>About <span class="time-to-complete-text"></span></p>
+<p>About <span class="time-to-complete-text">NN</span></p>
 </li>
 <li>
 <p>A text editor or IDE</p>
@@ -82,7 +82,7 @@
 <p>A Java Development Kit (JDK), version 1.7 or better</p>
 </li>
 <li>
-<p>A <a href="https://gradle.org/install">Gradle distribution</a>, version 3.5 or better</p>
+<p>A <a href="https://gradle.org/install">Gradle distribution</a>, version 4.0 or better</p>
 </li>
 </ul>
 </div>
@@ -98,9 +98,9 @@
 <div class="title">build.gradle</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">task hello { <i class="conum" data-value="1"></i><b>(1)</b>
-  doLast { <i class="conum" data-value="2"></i><b>(2)</b>
-      println <span class="string"><span class="delimiter">'</span><span class="content">Hello, World!</span><span class="delimiter">'</span></span>
-  }
+    doLast { <i class="conum" data-value="2"></i><b>(2)</b>
+        println <span class="string"><span class="delimiter">'</span><span class="content">Hello, World!</span><span class="delimiter">'</span></span>
+    }
 }</code></pre>
 </div>
 </div>
@@ -119,37 +119,40 @@
 <div class="paragraph">
 <p>Save the file and on the command-line and type:</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre>gradle tasks</pre>
-</div>
-</div>
 <div class="paragraph">
 <p>Save the file and on the command-line type <code>gradle tasks --all</code>. Your new task will appear under <code>Other tasks</code>.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock terminal">
 <div class="title">Verifying that your task has been created</div>
 <div class="content">
-<pre>Other tasks
+<pre>$ gradle tasks --all
+
+Other tasks
 -----------
 hello</pre>
 </div>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If you are using Gradle 4.0 or later you may see less output from the console that you might see in this guide. This is because in this guide output is shown as when <code>--console-plain</code> is also passed to Gradle as a command-line. This is done to show the tasks that Gradle is executing.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
-<p>Run your task</p>
+<p>Run your task.</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre>gradle hello</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>It will produce a simple output.</p>
-</div>
-<div class="listingblock">
+<div class="listingblock terminal">
 <div class="title">Output from executing your ad-hoc task</div>
 <div class="content">
-<pre>:hello <i class="conum" data-value="1"></i><b>(1)</b>
+<pre>$ gradle hello
+
+:hello <i class="conum" data-value="1"></i><b>(1)</b>
 Hello, World <i class="conum" data-value="2"></i><b>(2)</b></pre>
 </div>
 </div>
@@ -204,13 +207,13 @@ Hello, World <i class="conum" data-value="2"></i><b>(2)</b></pre>
 <div class="paragraph">
 <p>When you ran <code>gradle tasks --all</code> earlier you would have seen other tasks in the listing which contain descriptions and are grouped according to function. Also (and since Gradle 3.3) if a task does not have a group it will not be listed unless <code>--all</code> is specified.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock terminal">
 <div class="title">Well-documented tasks</div>
 <div class="content">
 <pre>Build Setup tasks
 -----------------
-init - Initializes a new Gradle build. [incubating]
-wrapper - Generates Gradle wrapper files. [incubating]</pre>
+init - Initializes a new Gradle build.
+wrapper - Generates Gradle wrapper files.</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -220,22 +223,24 @@ wrapper - Generates Gradle wrapper files. [incubating]</pre>
 <div class="title">build.gradle</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">task hello {
-  group <span class="string"><span class="delimiter">'</span><span class="content">Welcome</span><span class="delimiter">'</span></span>
-  description <span class="string"><span class="delimiter">'</span><span class="content">Produces a greeting</span><span class="delimiter">'</span></span>
+    group <span class="string"><span class="delimiter">'</span><span class="content">Welcome</span><span class="delimiter">'</span></span>
+    description <span class="string"><span class="delimiter">'</span><span class="content">Produces a greeting</span><span class="delimiter">'</span></span>
 
-  doLast {
-      println <span class="string"><span class="delimiter">'</span><span class="content">Hello, World</span><span class="delimiter">'</span></span>
-  }
+    doLast {
+        println <span class="string"><span class="delimiter">'</span><span class="content">Hello, World</span><span class="delimiter">'</span></span>
+    }
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>Run <code>gradle tasks</code> again.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock terminal">
 <div class="title">Output from 'tasks' task</div>
 <div class="content">
-<pre>Welcome tasks
+<pre>$ gradle tasks
+
+Welcome tasks
 -------------
 hello - Produces a greeting</pre>
 </div>
@@ -267,7 +272,7 @@ hello - Produces a greeting</pre>
     }
 }
 
-task hello ( type : Greeting ) { <i class="conum" data-value="6"></i><b>(6)</b>
+task hello (type : Greeting) { <i class="conum" data-value="6"></i><b>(6)</b>
     group <span class="string"><span class="delimiter">'</span><span class="content">Welcome</span><span class="delimiter">'</span></span>
     description <span class="string"><span class="delimiter">'</span><span class="content">Produces a world greeting</span><span class="delimiter">'</span></span>
     message <span class="string"><span class="delimiter">'</span><span class="content">Hello</span><span class="delimiter">'</span></span> <i class="conum" data-value="7"></i><b>(7)</b>
@@ -308,20 +313,14 @@ task hello ( type : Greeting ) { <i class="conum" data-value="6"></i><b>(6)</b>
 </table>
 </div>
 <div class="paragraph">
-<p>Test your modification.</p>
+<p>Test your modification. You should see the same output.</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre>gradle hello</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>You should see the same output</p>
-</div>
-<div class="listingblock">
+<div class="listingblock terminal">
 <div class="title">Output after conversion to a custom task type</div>
 <div class="content">
-<pre>:hello
+<pre>$ gradle hello
+
+:hello
 Hello, World!</pre>
 </div>
 </div>
@@ -354,22 +353,26 @@ No assignment is required during configuration as Gradle decorates the propertie
 <div class="paragraph">
 <p>Run <code>gradle tasks</code> again to verify that the new task has been added.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock terminal">
 <div class="title">Output of 'gradle tasks' after adding second task.</div>
 <div class="content">
-<pre>Welcome tasks
+<pre>$ gradle tasks
+
+Welcome tasks
 -------------
-hello - Produces a greeting
-gutenTag - Produces a German greeting</pre>
+gutenTag - Produces a German greeting
+hello - Produces a world greeting</pre>
 </div>
 </div>
 <div class="paragraph">
 <p>Finally, run the new task by doing <code>gradle gutenTag</code></p>
 </div>
-<div class="listingblock">
+<div class="listingblock terminal">
 <div class="title">Output of your second task.</div>
 <div class="content">
-<pre>:gutenTag
+<pre>$ gradle gutenTag
+
+:gutenTag
 Guten Tag, Welt!</pre>
 </div>
 </div>
@@ -405,10 +408,10 @@ Guten Tag, Welt!</pre>
 <div class="ulist">
 <ul>
 <li>
-<p>Having classes in a build script will soon lead to a messy and potentially unmaintainable build script. Learn how to <a href="https://docs.gradle.org/3.5/userguide/organizing_build_logic.html">organize your build logic</a>.</p>
+<p>Having classes in a build script will soon lead to a messy and potentially unmaintainable build script. Learn how to <a href="https://docs.gradle.org/4.0/userguide/organizing_build_logic.html">organize your build logic</a>.</p>
 </li>
 <li>
-<p>Read more about <a href="https://docs.gradle.org/current/userguide/tutorial_using_tasks.html">using tasks</a>, and <a href="https://docs.gradle.org/3.5/dsl/org.gradle.api.Task.html">predefined tasks and task types</a></p>
+<p>Read more about <a href="https://docs.gradle.org/current/userguide/tutorial_using_tasks.html">using tasks</a>, and <a href="https://docs.gradle.org/4.0/dsl/org.gradle.api.Task.html">predefined tasks and task types</a>.</p>
 </li>
 </ul>
 </div>
@@ -425,7 +428,7 @@ Guten Tag, Welt!</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-07-07 08:06:05 UTC
+Last updated 2017-07-30 16:11:20 UTC
 </div>
 </div>
 </body>
