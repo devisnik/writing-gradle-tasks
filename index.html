@@ -3,14 +3,14 @@
 <head><link crossorigin href="//assets.gradle.com" rel="preconnect">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,400i">
 <link rel="stylesheet" href="https://guides.gradle.org/css/asciidoctor.css">
-<link rel="stylesheet" href="https://guides.gradle.org/css/docs-blue-theme-4.5.2.css">
+<link rel="stylesheet" href="https://guides.gradle.org/css/docs-blue-theme-4.7.css">
 <link rel="apple-touch-icon" sizes="180x180" href="https://guides.gradle.org/icon/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="https://guides.gradle.org/icon/favicon-32x32.png" sizes="32x32">
 <link rel="icon" type="image/png" href="https://guides.gradle.org/icon/favicon-16x16.png" sizes="16x16">
 <link rel="manifest" href="https://guides.gradle.org/icon/manifest.json">
 <link rel="mask-icon" href="https://guides.gradle.org/icon/safari-pinned-tab.svg" color="#5bbad5">
 <link rel="shortcut icon" href="https://guides.gradle.org/icon/favicon.ico">
-<script defer src="https://guides.gradle.org/js/guides.js"></script>
+<script defer src="https://guides.gradle.org/js/guides-4.7.js"></script>
 <script defer src="https://guides.gradle.org/js/set-time-to-complete-text.js"></script>
 <script async src="https://guides.gradle.org/js/autotrack.js"></script>
 
@@ -21,7 +21,6 @@
 <meta name="author" content="Schalk Cronjé">
 <title>Writing Custom Gradle Tasks</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
-<link rel="stylesheet" href="./coderay-asciidoctor.css">
 </head>
 <body class="article">
 <header class="site-layout__header site-header" itemscope="itemscope" itemtype="https://schema.org/WPHeader">
@@ -132,7 +131,7 @@
 <p>A Java Development Kit (JDK), version 1.7 or better</p>
 </li>
 <li>
-<p>A <a href="https://gradle.org/install">Gradle distribution</a>, version 4.6 or better</p>
+<p>A <a href="https://gradle.org/install">Gradle distribution</a>, version 4.7 or better</p>
 </li>
 </ul>
 </div>
@@ -147,9 +146,9 @@
 <div class="listingblock">
 <div class="title">build.gradle</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">task hello { <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">task hello { <i class="conum" data-value="1"></i><b>(1)</b>
     doLast { <i class="conum" data-value="2"></i><b>(2)</b>
-        println <span class="string"><span class="delimiter">'</span><span class="content">Hello, World!</span><span class="delimiter">'</span></span>
+        println 'Hello, World!'
     }
 }</code></pre>
 </div>
@@ -231,8 +230,8 @@ Hello, World <i class="conum" data-value="2"></i><b>(2)</b></pre>
 <div class="title">Do not use &lt;&lt; as an alternative to doLast</div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">task hello &lt;&lt; {
-  println <span class="string"><span class="delimiter">'</span><span class="content">Hello, World!</span><span class="delimiter">'</span></span>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">task hello &lt;&lt; {
+  println 'Hello, World!'
 }</code></pre>
 </div>
 </div>
@@ -272,12 +271,12 @@ wrapper - Generates Gradle wrapper files.</pre>
 <div class="listingblock">
 <div class="title">build.gradle</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">task hello {
-    group <span class="string"><span class="delimiter">'</span><span class="content">Welcome</span><span class="delimiter">'</span></span>
-    description <span class="string"><span class="delimiter">'</span><span class="content">Produces a greeting</span><span class="delimiter">'</span></span>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">task hello {
+    group 'Welcome'
+    description 'Produces a greeting'
 
     doLast {
-        println <span class="string"><span class="delimiter">'</span><span class="content">Hello, World</span><span class="delimiter">'</span></span>
+        println 'Hello, World'
     }
 }</code></pre>
 </div>
@@ -312,21 +311,21 @@ hello - Produces a greeting</pre>
 <div class="listingblock">
 <div class="title">build.gradle</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Greeting</span> <span class="directive">extends</span> DefaultTask {  <i class="conum" data-value="1"></i><b>(1)</b> <i class="conum" data-value="2"></i><b>(2)</b>
-    <span class="predefined-type">String</span> message <i class="conum" data-value="3"></i><b>(3)</b>
-    <span class="predefined-type">String</span> recipient
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Greeting extends DefaultTask { <i class="conum" data-value="1"></i><b>(1)</b> <i class="conum" data-value="2"></i><b>(2)</b>
+    String message <i class="conum" data-value="3"></i><b>(3)</b>
+    String recipient
 
-    <span class="annotation">@TaskAction</span> <i class="conum" data-value="4"></i><b>(4)</b>
-    <span class="type">void</span> sayGreeting() {
-        println <span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">${</span>message<span class="inline-delimiter">}</span></span><span class="content">, </span><span class="inline"><span class="inline-delimiter">${</span>recipient<span class="inline-delimiter">}</span></span><span class="content">!</span><span class="delimiter">&quot;</span></span> <i class="conum" data-value="5"></i><b>(5)</b>
+    @TaskAction <i class="conum" data-value="4"></i><b>(4)</b>
+    void sayGreeting() {
+        println "${message}, ${recipient}!" <i class="conum" data-value="5"></i><b>(5)</b>
     }
 }
 
 task hello (type : Greeting) { <i class="conum" data-value="6"></i><b>(6)</b>
-    group <span class="string"><span class="delimiter">'</span><span class="content">Welcome</span><span class="delimiter">'</span></span>
-    description <span class="string"><span class="delimiter">'</span><span class="content">Produces a world greeting</span><span class="delimiter">'</span></span>
-    message <span class="string"><span class="delimiter">'</span><span class="content">Hello</span><span class="delimiter">'</span></span> <i class="conum" data-value="7"></i><b>(7)</b>
-    recipient <span class="string"><span class="delimiter">'</span><span class="content">World</span><span class="delimiter">'</span></span>
+    group 'Welcome'
+    description 'Produces a world greeting'
+    message 'Hello' <i class="conum" data-value="7"></i><b>(7)</b>
+    recipient 'World'
 }</code></pre>
 </div>
 </div>
@@ -380,11 +379,11 @@ Hello, World!</pre>
 <div class="listingblock">
 <div class="title">Adding a second task</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">task gutenTag( type : Greeting ) {
-    group <span class="string"><span class="delimiter">'</span><span class="content">Welcome</span><span class="delimiter">'</span></span>
-    description <span class="string"><span class="delimiter">'</span><span class="content">Produces a German greeting</span><span class="delimiter">'</span></span>
-    message <span class="string"><span class="delimiter">'</span><span class="content">Guten Tag</span><span class="delimiter">'</span></span>
-    recipient <span class="string"><span class="delimiter">'</span><span class="content">Welt</span><span class="delimiter">'</span></span>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">task gutenTag( type : Greeting ) {
+    group 'Welcome'
+    description 'Produces a German greeting'
+    message 'Guten Tag'
+    recipient 'Welt'
 }</code></pre>
 </div>
 </div>
@@ -458,10 +457,10 @@ Guten Tag, Welt!</pre>
 <div class="ulist">
 <ul>
 <li>
-<p>Having classes in a build script will soon lead to a messy and potentially unmaintainable build script. Learn how to <a href="https://docs.gradle.org/4.6/userguide/organizing_build_logic.html">organize your build logic</a>.</p>
+<p>Having classes in a build script will soon lead to a messy and potentially unmaintainable build script. Learn how to <a href="https://docs.gradle.org/4.7/userguide/organizing_build_logic.html">organize your build logic</a>.</p>
 </li>
 <li>
-<p>Read more about <a href="https://docs.gradle.org/current/userguide/tutorial_using_tasks.html">using tasks</a>, and <a href="https://docs.gradle.org/4.6/dsl/org.gradle.api.Task.html">predefined tasks and task types</a>.</p>
+<p>Read more about <a href="https://docs.gradle.org/current/userguide/tutorial_using_tasks.html">using tasks</a>, and <a href="https://docs.gradle.org/4.7/dsl/org.gradle.api.Task.html">predefined tasks and task types</a>.</p>
 </li>
 </ul>
 </div>
@@ -476,6 +475,9 @@ Guten Tag, Welt!</pre>
 </div>
 </div>
 </div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
 <footer class="site-layout__footer site-footer" itemscope="itemscope" itemtype="https://schema.org/WPFooter">
     <nav class="site-footer__navigation" itemtype="https://schema.org/SiteNavigationElement">
         <section class="site-footer__links">
