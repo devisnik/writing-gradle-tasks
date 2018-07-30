@@ -209,10 +209,20 @@
 <p>A text editor or IDE</p>
 </li>
 <li>
-<p>A Java Development Kit (JDK), version 1.7 or better</p>
+<p>A Java Development Kit (JDK)</p>
+<div class="ulist">
+<ul>
+<li>
+<p>version 7 or higher if using the Gradle Groovy DSL</p>
 </li>
 <li>
-<p>A <a href="https://gradle.org/install">Gradle distribution</a>, version 4.7 or better</p>
+<p>version 8 or higher if using the Gradle Kotlin DSL</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>A <a href="https://gradle.org/install">Gradle distribution</a>, version 4.9 or better</p>
 </li>
 </ul>
 </div>
@@ -222,14 +232,24 @@
 <h2 id="create_an_ad_hoc_task"><a class="anchor" href="#create_an_ad_hoc_task"></a><a class="link" href="#create_an_ad_hoc_task">Create an ad-hoc task</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In a new folder create a <code>build.gradle</code> and enter the following</p>
+<p>In a new folder create a <code>build.gradle</code> file (if you prefer using the Groovy DSL), or a <code>build.gradle.kts</code> file (if you prefer using the Kotlin DSL) and enter the following</p>
 </div>
-<div class="listingblock">
+<div class="listingblock multi-language-sample">
 <div class="title">build.gradle</div>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">task hello { <i class="conum" data-value="1"></i><b>(1)</b>
     doLast { <i class="conum" data-value="2"></i><b>(2)</b>
         println 'Hello, World!'
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="title">build.gradle.kts</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">tasks.create("hello") { <i class="conum" data-value="1"></i><b>(1)</b>
+    doLast { <i class="conum" data-value="2"></i><b>(2)</b>
+        println("Hello, World!")
     }
 }</code></pre>
 </div>
@@ -245,9 +265,6 @@
 <td>Add a task action to print to the console.</td>
 </tr>
 </table>
-</div>
-<div class="paragraph">
-<p>Save the file and on the command-line and type:</p>
 </div>
 <div class="paragraph">
 <p>Save the file and on the command-line type <code>gradle tasks --all</code>. Your new task will appear under <code>Other tasks</code>.</p>
@@ -299,9 +316,9 @@ Hello, World <i class="conum" data-value="2"></i><b>(2)</b></pre>
 </table>
 </div>
 <div class="paragraph">
-<p>Congratulations! You have you added your first ad-hoc task.</p>
+<p>Congratulations! You have added your first ad-hoc task.</p>
 </div>
-<div class="admonitionblock important">
+<div class="admonitionblock important multi-language-text lang-groovy">
 <table>
 <tr>
 <td class="icon">
@@ -349,7 +366,7 @@ wrapper - Generates Gradle wrapper files.</pre>
 <div class="paragraph">
 <p>This is achieved by setting the <code>group</code> and <code>description</code> properties on the task.  Edit your ad-hoc task and add the following:</p>
 </div>
-<div class="listingblock">
+<div class="listingblock multi-language-sample">
 <div class="title">build.gradle</div>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">task hello {
@@ -358,6 +375,19 @@ wrapper - Generates Gradle wrapper files.</pre>
 
     doLast {
         println 'Hello, World'
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="title">build.gradle.kts</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">tasks.create("hello") {
+    group = "Welcome"
+    description = "Produces a greeting"
+
+    doLast {
+        println("Hello, World")
     }
 }</code></pre>
 </div>
@@ -389,7 +419,7 @@ hello - Produces a greeting</pre>
 <div class="paragraph">
 <p>Return to your build script and add the following class and refactor your <code>hello</code> task.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock multi-language-sample">
 <div class="title">build.gradle</div>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Greeting extends DefaultTask { <i class="conum" data-value="1"></i><b>(1)</b> <i class="conum" data-value="2"></i><b>(2)</b>
@@ -402,7 +432,7 @@ hello - Produces a greeting</pre>
     }
 }
 
-task hello (type : Greeting) { <i class="conum" data-value="6"></i><b>(6)</b>
+task hello(type: Greeting) { <i class="conum" data-value="6"></i><b>(6)</b>
     group 'Welcome'
     description 'Produces a world greeting'
     message 'Hello' <i class="conum" data-value="7"></i><b>(7)</b>
@@ -410,11 +440,32 @@ task hello (type : Greeting) { <i class="conum" data-value="6"></i><b>(6)</b>
 }</code></pre>
 </div>
 </div>
+<div class="listingblock multi-language-sample">
+<div class="title">build.gradle.kts</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">open class Greeting: DefaultTask() { <i class="conum" data-value="1"></i><b>(1)</b> <i class="conum" data-value="2"></i><b>(2)</b>
+    lateinit var message: String   <i class="conum" data-value="3"></i><b>(3)</b>
+    lateinit var recipient: String
+
+    @TaskAction <i class="conum" data-value="4"></i><b>(4)</b>
+    fun sayGreeting() {
+        println("$message, $recipient!") <i class="conum" data-value="5"></i><b>(5)</b>
+    }
+}
+
+tasks.create&lt;Greeting&gt;("hello") { <i class="conum" data-value="6"></i><b>(6)</b>
+    group = "Welcome"
+    description = "Produces a world greeting"
+    message = "Hello" <i class="conum" data-value="7"></i><b>(7)</b>
+    recipient = "World"
+}</code></pre>
+</div>
+</div>
 <div class="colist arabic">
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>As the build DSL in a <code>build.gradle</code> file is a Groovy-base DSL, the class will be a Groovy class.</td>
+<td>As the build DSL in a <code>build.gradle</code> (resp. <code>build.gradle.kts</code>) file is a Groovy-based (resp. Kotlin-based) DSL, the class will be a Groovy (resp. Kotlin) class.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
@@ -430,7 +481,7 @@ task hello (type : Greeting) { <i class="conum" data-value="6"></i><b>(6)</b>
 </tr>
 <tr>
 <td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>Print the message using a standard Groovy interpolated string.</td>
+<td>Print the message using a standard Groovy/Kotlin interpolated string.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="6"></i><b>6</b></td>
@@ -457,10 +508,10 @@ Hello, World!</pre>
 <div class="paragraph">
 <p>Now that you have the custom task type, you can add additional tasks. Add a German version of the greeting by just creating an additional task.</p>
 </div>
-<div class="listingblock">
-<div class="title">Adding a second task</div>
+<div class="listingblock multi-language-sample">
+<div class="title">build.gradle</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">task gutenTag( type : Greeting ) {
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">task gutenTag(type: Greeting) {
     group 'Welcome'
     description 'Produces a German greeting'
     message 'Guten Tag'
@@ -468,14 +519,25 @@ Hello, World!</pre>
 }</code></pre>
 </div>
 </div>
-<div class="admonitionblock note">
+<div class="listingblock multi-language-sample">
+<div class="title">build.gradle.kts</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-kotlin" data-lang="kotlin">tasks.create&lt;Greeting&gt;("gutenTag") {
+    group = "Welcome"
+    description = "Produces a German greeting"
+    message = "Guten Tag"
+    recipient = "Welt"
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note multi-language-text lang-groovy">
 <table>
 <tr>
 <td class="icon">
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-No assignment is required during configuration as Gradle decorates the properties to allow for a more declarative DSL.
+In the Groovy DSL, no assignment is required during configuration as Gradle decorates the properties to allow for a more declarative DSL.
 </td>
 </tr>
 </table>
@@ -538,10 +600,10 @@ Guten Tag, Welt!</pre>
 <div class="ulist">
 <ul>
 <li>
-<p>Having classes in a build script will soon lead to a messy and potentially unmaintainable build script. Learn how to <a href="https://docs.gradle.org/4.7/userguide/organizing_build_logic.html">organize your build logic</a>.</p>
+<p>Having classes in a build script will soon lead to a messy and potentially unmaintainable build script. Learn how to <a href="https://docs.gradle.org/4.9/userguide/organizing_build_logic.html">organize your build logic</a>.</p>
 </li>
 <li>
-<p>Read more about <a href="https://docs.gradle.org/current/userguide/tutorial_using_tasks.html">using tasks</a>, and <a href="https://docs.gradle.org/4.7/dsl/org.gradle.api.Task.html">predefined tasks and task types</a>.</p>
+<p>Read more about <a href="https://docs.gradle.org/current/userguide/tutorial_using_tasks.html">using tasks</a>, and <a href="https://docs.gradle.org/4.9/dsl/org.gradle.api.Task.html">predefined tasks and task types</a>.</p>
 </li>
 </ul>
 </div>
