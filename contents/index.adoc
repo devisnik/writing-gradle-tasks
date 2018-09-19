@@ -43,7 +43,7 @@ $ gradle tasks --all
 include::{groovy-example-dir}/output/part1/gradle-tasks.txt[]
 ----
 
-NOTE: If you are using Gradle 4.0 or later you may see less output from the console that you might see in this guide. This is because in this guide output is shown as when `--console-plain` is also passed to Gradle as a command-line. This is done to show the tasks that Gradle is executing.
+NOTE: If you are using Gradle 4.0 or later you may see less output from the console than you might see in this guide. This is because in this guide output is shown as when `--console-plain` is also passed to Gradle as a command-line. This is done to show the tasks that Gradle is executing.
 
 Run your task.
 
@@ -70,7 +70,7 @@ task hello << {
 }
 ----
 
-You may comes across an alternative form for creating ad-hoc tasks in some older documentation and blog posts whereby the left-shift operator (`<<`) is used.
+You may come across an alternative form for creating ad-hoc tasks in some older documentation and blog posts whereby the left-shift operator (`<<`) is used.
 
 This form has caused too much confusion in the past especially among people that are new to Gradle. It also reduces readability. We have https://docs.gradle.org/3.2/release-notes#the-left-shift-operator-on-the-task-interface[deprecated this behaviour] and the functionality will be removed in Gradle 5.0.
 ====
@@ -191,7 +191,7 @@ That's it! You've worked through the steps necessary to create a custom Gradle T
 
 * Create an ad-hoc task and add an action using `doLast`.
 * Document a task.
-* Convert an ad-hoc task to a custom Gradle task type and creating task instances.
+* Convert an ad-hoc task to a custom Gradle task type and create task instances.
 * Using `@TaskAction` to set a default action for a task type.
 
 == Next steps
